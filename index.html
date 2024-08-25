@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Chronicles: The Story Weaver</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #2c3e50, #3498db);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        /* Плавные переходы */
+        * {
+            transition: all 0.3s ease;
+        }
+
+        /* Анимация с эмодзи на фоне */
+        .emoji-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .emoji {
+            position: absolute;
+            font-size: 40px;
+            animation: float 10s infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-20px);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 0.8;
+            }
+        }
+
+        #code-entry {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeIn 1s forwards;
+        }
+
+        h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #FFD700;
+        }
+
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        input[type="password"]:focus {
+            background-color: rgba(255, 255, 255, 0.3);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background-color: #FFD700;
+            color: black;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #FFC700;
+        }
+
+        #error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: fadeIn 0.5s forwards;
+        }
+
+        #story-creator {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            margin-top: 20px;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+        }
+
+        input[type="text"]:focus {
+            background-color: rgba(255, 255, 255, 0.3);
+            outline: none;
+        }
+
+        #story-output {
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            max-height: 600px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            font-size: 16px;
+            text-align: left;
+            line-height: 1.8;
+            position: relative;
+            color: #ffffff;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeIn 1s forwards 0.5s;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .copy-button:hover {
+            background-color: #1976D2;
+        }
+
+        .speak-button {
+            position: absolute;
+            top: 10px;
+            right: 100px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .speak-button:hover {
+            background-color: #45A049;
+        }
+
+        .footer {
+            margin-top: 20px;
+            color: #ffffff;
+            font-size: 14px;
+            text-align: center;
+            z-index: 1;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeIn 1s forwards 0.5s;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="emoji-bg">
+        <span class="emoji" style="left: 10%; top: 20%; animation-duration: 15s;">😈</span>
+        <span class="emoji" style="left: 20%; top: 40%; animation-duration: 12s;">👻</span>
+        <span class="emoji" style="left: 70%; top: 10%; animation-duration: 18s;">💀</span>
+        <span class="emoji" style="left: 60%; top: 50%; animation-duration: 20s;">🎃</span>
+        <span class="emoji" style="left: 30%; top: 80%; animation-duration: 22s;">👹</span>
+    </div>
+
+    <div id="code-entry">
+        <h2>Введите секретный код</h2>
+        <input type="password" id="secret-code-input" placeholder="Введите код">
+        <button onclick="checkCode()">Войти</button>
+        <p id="error-message"></p>
+    </div>
+
+    <div id="story-creator">
+        <h2>Создание Истории</h2>
+        <form id="story-form" onsubmit="generateStory(event)">
+            <input type="text" id="character-name" name="character-name" placeholder="Введите имя персонажа" required>
+            <button type="submit">Сгенерировать историю</button>
+            <p id="info-message" style="display: none;">История генерируется, пожалуйста, подождите...</p>
+        </form>
+        <div id="story-output">
+            <button class="copy-button" onclick="copyStory()">Скопировать</button>
+            <button class="speak-button" onclick="speakStory()">Озвучить</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Dark Chronicles. Все права защищены.</p>
+    </div>
+
+    <script>
+        const secretCode = "2914";
+        let isGenerating = false;
+
+        function checkCode() {
+            const inputCode = document.getElementById("secret-code-input").value;
+            const errorMessage = document.getElementById("error-message");
+
+            if (inputCode === secretCode) {
+                document.getElementById("code-entry").style.animation = "fadeOut 0.5s forwards";
+                setTimeout(() => {
+                    document.getElementById("code-entry").style.display = "none";
+                    document.getElementById("story-creator").style.display = "block";
+                    document.getElementById("story-creator").style.animation = "fadeIn 0.5s forwards";
+                }, 500);
+            } else {
+                errorMessage.textContent = "Неверный код. Попробуйте снова.";
+                errorMessage.style.opacity = "1";
+                errorMessage.style.transform = "translateY(0)";
+            }
+        }
+
+        function generateStory(event) {
+            event.preventDefault();
+
+            const characterName = document.getElementById("character-name").value.trim();
+            const storyOutput = document.getElementById("story-output");
+            const infoMessage = document.getElementById("info-message");
+
+            if (isGenerating) {
+                infoMessage.textContent = "Нельзя сгенерировать пока генерируется другая история.";
+                infoMessage.style.display = "block";
+                return;
+            }
+
+            if (characterName === "") {
+                alert("Введите имя персонажа.");
+                return;
+            }
+
+            isGenerating = true;
+            infoMessage.style.display = "block";
+            infoMessage.textContent = "История генерируется, пожалуйста, подождите...";
+            storyOutput.textContent = ""; // Очистка предыдущего текста
+            let index = 0;
+
+            const stories = [
+                `История 1: ${characterName} жил в отдаленной деревне, окруженной мрачным лесом. Однажды ночью, когда луна была полной, он услышал странный звук за окном. Это было похоже на скрежет металла по стеклу. ${characterName} подошел к окну и посмотрел наружу. В темноте он увидел силуэт, который двигался вдоль края леса. Решив проверить, что происходит, он накинул пальто и вышел из дома. С каждым шагом, который он делал к лесу, скрежет становился все громче. Когда он подошел к опушке, звук прекратился. Внезапно он почувствовал, как холодный ветер ударил ему в лицо, а за спиной раздался громкий треск. ${characterName} обернулся и увидел, как деревья начали смыкаться, словно пытаясь удержать его в этом месте. Не раздумывая, он рванул обратно к своему дому, но путь был заблокирован...`,
+                `История 2: ${characterName} был старым библиотекарем, чьи руки тряслись от возраста, но он продолжал упорно работать в своей заброшенной библиотеке. Однажды, когда он закрывал очередную книгу, в дальнем углу библиотеки послышался странный шум. Он подошел ближе и увидел, как одна из полок начала медленно отклоняться, открывая потайную дверь. Внутри была комната, полная старых книг, о которых он никогда не слышал. В центре комнаты лежала большая книга с надписью "История без конца". ${characterName} осторожно открыл её и начал читать. Каждая страница описывала события, которые происходили в его жизни. Страницы листались сами, и вскоре он понял, что книга предсказывает его будущее. Но страницы внезапно остановились, и последняя глава гласила: "Конец близок. Ты не можешь избежать своей судьбы". ${characterName} услышал шаги за своей спиной и, обернувшись, увидел тень, которая быстро приближалась к нему. Он закрыл книгу и бросился бежать, но все двери библиотеки захлопнулись, оставляя его наедине с тем, что скрывалось в тени.`,
+                // Добавьте сюда оставшиеся 27 историй.
+            ];
+
+            const randomIndex = Math.floor(Math.random() * stories.length);
+            const selectedStory = stories[randomIndex];
+
+            function typeWriter() {
+                if (index < selectedStory.length) {
+                    storyOutput.textContent += selectedStory.charAt(index);
+                    index++;
+                    setTimeout(typeWriter, 50); // Скорость печати текста
+                } else {
+                    isGenerating = false;
+                    infoMessage.style.display = "none";
+                }
+            }
+
+            storyOutput.style.opacity = "0";
+            storyOutput.style.transform = "translateY(-20px)";
+            setTimeout(() => {
+                typeWriter(); // Запуск анимации печати текста
+                storyOutput.style.opacity = "1";
+                storyOutput.style.transform = "translateY(0)";
+            }, 100);
+        }
+
+        function copyStory() {
+            const storyText = document.getElementById("story-output").textContent;
+            navigator.clipboard.writeText(storyText).then(() => {
+                alert("История скопирована в буфер обмена!");
+            });
+        }
+
+        function speakStory() {
+            const storyText = document.getElementById("story-output").textContent;
+            const utterance = new SpeechSynthesisUtterance(storyText);
+            utterance.lang = 'ru-RU'; // Устанавливаем русский язык
+            speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>
